@@ -1,4 +1,4 @@
-package fr.vehiclerental.maintenance;
+package fr.vehiclerental.unavailability;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

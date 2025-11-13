@@ -1,4 +1,4 @@
-package fr.vehiclerental.maintenance.exception;
+package fr.vehiclerental.unavailability.exception;
 
 public class UnavailabilityNotFind extends RuntimeException {
     public UnavailabilityNotFind() {

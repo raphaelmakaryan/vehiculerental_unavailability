@@ -1,12 +1,14 @@
-package fr.vehiclerental.maintenance.entity;
+package fr.vehiclerental.unavailability.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 @Entity
+@AllArgsConstructor
 @Table(name = "Unavailability")
 public class Unavailability {
     @Id
@@ -18,13 +20,7 @@ public class Unavailability {
     private int time;
 
     public Unavailability() {
-    }
-
-    public Unavailability(Integer id, String typeVehicle, String description, int time) {
-        this.id = id;
-        this.typeVehicle = typeVehicle;
-        this.description = description;
-        this.time = time;
+        super();
     }
 
     public String getDescription() {

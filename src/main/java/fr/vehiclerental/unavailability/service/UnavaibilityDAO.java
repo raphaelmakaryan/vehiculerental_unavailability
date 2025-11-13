@@ -1,6 +1,6 @@
-package fr.vehiclerental.maintenance.service;
+package fr.vehiclerental.unavailability.service;
 
-import fr.vehiclerental.maintenance.entity.Unavailability;
+import fr.vehiclerental.unavailability.entity.Unavailability;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

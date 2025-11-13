@@ -1,4 +1,4 @@
-package fr.vehiclerental.maintenance.exception;
+package fr.vehiclerental.unavailability.exception;
 
 import java.time.LocalDateTime;
 
