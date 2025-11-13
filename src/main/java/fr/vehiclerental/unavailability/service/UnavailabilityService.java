@@ -11,16 +11,6 @@ import java.util.List;
 @Service
 
 public class UnavailabilityService {
-
-    public List<Unavailability> requestUnavaibility(int idUnavailability, UnavaibilityDAO unavaibilityDao) {
-        List<Unavailability> response = unavaibilityDao.findById(idUnavailability);
-        if (response != null) {
-            return response;
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
     public void editUnavailability(Unavailability findindUnavailability, Unavailability unavailabilityBodyRequest, UnavaibilityDAO unavailabilityDao) {
         findindUnavailability.setTypeVehicle(unavailabilityBodyRequest.getTypeVehicle());
         findindUnavailability.setDescription(unavailabilityBodyRequest.getDescription());
