@@ -56,6 +56,9 @@ public class UnavailabilityService {
         unavaibilityDAO.save(unavailability);
     }
 
+    /**
+     * Méthode pour crée les soucis
+     */
     public void saveInitialData() {
         createMoto1();
         createMoto2();
@@ -64,6 +67,12 @@ public class UnavailabilityService {
         createUtility1();
     }
 
+    /**
+     * Méthode pour modifier un soucis
+     * @param findindUnavailability Soucis récupérer via son id plus tot
+     * @param unavailabilityBodyRequest Soucis réqcuperer venant de la requete
+     * @param unavailabilityDao DAO de unavailability
+     */
     public void editUnavailability(Unavailability findindUnavailability, Unavailability unavailabilityBodyRequest, UnavaibilityDAO unavailabilityDao) {
         findindUnavailability.setTypeVehicle(unavailabilityBodyRequest.getTypeVehicle());
         findindUnavailability.setDescription(unavailabilityBodyRequest.getDescription());

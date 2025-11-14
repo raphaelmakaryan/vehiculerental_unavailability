@@ -30,6 +30,12 @@ public class WebAppController {
         this.unavaibilityService = unavaibilityService;
     }
 
+    @Operation(summary = "Home page")
+    @RequestMapping("/")
+    public String index() {
+        return "Welcome to the Vehicle Rental company's Unavailability API!";
+    }
+
     @Operation(summary = "Voir tout les soucis de la base de données ", description = "Requête pour la récupération de tout les soucis de la base de données ")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Unavailability.class)))})
     @GetMapping("/unavailability")
