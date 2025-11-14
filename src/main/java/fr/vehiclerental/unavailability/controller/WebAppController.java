@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class WebAppController {
 
 
     @Operation(summary = "Voir un soucis spécifique de la base de données", description = "Requête pour la soucis d'un entretien de la base de données")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Unavailability.class))), @ApiResponse(responseCode = "405", description = "Échec de l'opération ", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UnavailabilityNotFind.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Unavailability.class))), @ApiResponse(responseCode = "405", description = "Échec de l'opération ", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "Erreur générale", value = "{\n" + "  \"localDateTime\": \"2025-11-03T08:25:00\",\n" + "  \"message\": \"The maintenance schedule defined for this vehicle was not found. \",\n" + "  \"status\": 404\n" + "}")}))})
     @RequestMapping(path = "/unavailability/{id}", method = RequestMethod.GET)
     public List<Unavailability> getUnavailability(@Parameter(description = "Identifiant du soucis", required = true) @PathVariable(value = "id") int id) {
         try {
@@ -55,51 +56,8 @@ public class WebAppController {
         }
     }
 
-/*
-    @Operation(summary = "Crée un nouvel entretien dans la base de données", description = "Requête pour crée/ajouter un entretien dans la base de données")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationAdd.class))), @ApiResponse(responseCode = "405", description = "Erreur métier",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ErrorResponse.class),
-                    examples = {
-                            @ExampleObject(
-                                    name = "Client introuvable",
-                                    value = """
-                                            {
-                                              "timestamp": "2025-11-06T15:00:00",
-                                              "status": 404,
-                                              "error": "Client introuvable",
-                                              "message": "Client not found with ID : 1"
-                                            }
-                                            """
-                            ),
-                            @ExampleObject(
-                                    name = "Client déjà réservé",
-                                    value = """
-                                            {
-                                              "timestamp": "2025-11-06T15:00:00",
-                                              "status": 404,
-                                              "error": "Client déjà réservé",
-                                              "message": "Ce client dispose déjà d'une réservation en cours"
-                                            }
-                                            """
-                            ),
-                            @ExampleObject(
-                                    name = "Véhicule déjà réservé",
-                                    value = """
-                                            {
-                                              "timestamp": "2025-11-06T15:00:00",
-                                              "status": 404,
-                                              "error": "Véhicule déjà réservé",
-                                              "message": "Le véhicule 12 est déjà réservé pour cette période"
-                                            }
-                                            """
-                            )
-                    }
-            )
-    )})
-
- */
-
+    @Operation(summary = "Crée un nouveau soucis dans la base de données", description = "Requête pour crée/ajouter un soucis dans la base de données")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n" + "    \"success\": true,\n" + "    \"message\": \"Votre soucis a été ajoutée !\"\n" + "}")))})
     @RequestMapping(value = "/unavailability", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> addUnavailability(@Validated @RequestBody Unavailability informations) {
         try {
@@ -140,7 +98,7 @@ public class WebAppController {
     }
 
     @Operation(summary = "Supprimer un soucis de la base de données", description = "Requête pour supprimer un soucis de la base de données")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n" + "    \"success\": true,\n" + "    \"message\": \"Votre reservation a été supprimé !\"\n" + "}"))), @ApiResponse(responseCode = "405", description = "Échec de l'opération ", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "Erreur générale", value = "{\n" + "  \"localDateTime\": \"2025-11-03T08:25:00\",\n" + "  \"message\": \"Reservation not found with ID : 1 \",\n" + "  \"status\": 404\n" + "}")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n" + "    \"success\": true,\n" + "    \"message\": \"Votre soucis a été supprimé !\"\n" + "}"))), @ApiResponse(responseCode = "405", description = "Échec de l'opération ", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "Erreur générale", value = "{\n" + "  \"localDateTime\": \"2025-11-03T08:25:00\",\n" + "  \"message\": \"Unavailability not found with ID : 1 \",\n" + "  \"status\": 404\n" + "}")
     }))})
     @DeleteMapping("/unavailability/{id}")
     public ResponseEntity<Map<String, Object>> deleteUnavailability(@Parameter(description = "Identifiant du soucis", required = true) @PathVariable(value = "id") int idSoucis) {
