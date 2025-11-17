@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -49,30 +48,14 @@ public class WebAppController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Unavailability.class))), @ApiResponse(responseCode = "405", description = "Échec de l'opération ", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "Erreur générale", value = "{\n" + "  \"localDateTime\": \"2025-11-03T08:25:00\",\n" + "  \"message\": \"The maintenance schedule defined for this vehicle was not found. \",\n" + "  \"status\": 404\n" + "}")}))})
     @RequestMapping(path = "/unavailability/{id}", method = RequestMethod.GET)
     public List<Unavailability> getUnavailability(@Parameter(description = "Identifiant du soucis", required = true) @PathVariable(value = "id") int id) {
-        try {
-            return unavaibilityDAO.findById(id);
-        } catch (Exception e) {
-            throw new UnavailabilityNotFind();
-        }
+        return unavaibilityService.oneUnavailability(id);
     }
 
     @Operation(summary = "Crée un nouveau soucis dans la base de données", description = "Requête pour crée/ajouter un soucis dans la base de données")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Opération réussi", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n" + "    \"success\": true,\n" + "    \"message\": \"Votre soucis a été ajoutée !\"\n" + "}")))})
     @RequestMapping(value = "/unavailability", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> addUnavailability(@Validated @RequestBody Unavailability informations) {
-        try {
-            Map<String, Object> response = new HashMap<>();
-            Unavailability unavailability = new Unavailability();
-            unavailability.setTypeVehicle(informations.getTypeVehicle());
-            unavailability.setDescription(informations.getDescription());
-            unavailability.setTime(informations.getTime());
-            unavaibilityDAO.save(unavailability);
-            response.put("success", true);
-            response.put("message", "Votre soucis a été ajouté !");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new UnavailabilityNotFind();
-        }
+        return ResponseEntity.ok(unavaibilityService.addUnavailabilityService(informations));
     }
 
 
@@ -81,20 +64,7 @@ public class WebAppController {
     }))})
     @PutMapping("/unavailability/{id}")
     public ResponseEntity<Map<String, Object>> editUnavailability(@Parameter(description = "Identifiant d'un soucis", required = true) @PathVariable(value = "id") int idSoucis, @Validated @RequestBody Unavailability unavailabilityRequest) {
-        try {
-            List<Unavailability> unavailability = unavaibilityDAO.findById(idSoucis);
-            if (unavailability == null || unavailability.isEmpty()) {
-                throw new UnavailabilityNotFind();
-            } else {
-                Map<String, Object> response = new HashMap<>();
-                unavaibilityService.editUnavailability(unavailability.getFirst(), unavailabilityRequest, unavaibilityDAO);
-                response.put("success", true);
-                response.put("message", "Votre soucis a été modifié !");
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+        return ResponseEntity.ok(unavaibilityService.editUnavailabilityService(idSoucis, unavailabilityRequest));
     }
 
     @Operation(summary = "Supprimer un soucis de la base de données", description = "Requête pour supprimer un soucis de la base de données")
@@ -102,16 +72,7 @@ public class WebAppController {
     }))})
     @DeleteMapping("/unavailability/{id}")
     public ResponseEntity<Map<String, Object>> deleteUnavailability(@Parameter(description = "Identifiant du soucis", required = true) @PathVariable(value = "id") int idSoucis) {
-        List<Unavailability> unavailability = unavaibilityDAO.findById(idSoucis);
-        if (unavailability == null || unavailability.isEmpty()) {
-            throw new UnavailabilityNotFind();
-        } else {
-            unavaibilityDAO.delete(unavailability.getFirst());
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Votre soucis a été supprimé !");
-            return ResponseEntity.ok(response);
-        }
+        return ResponseEntity.ok(unavaibilityService.deleteUnavailabilityService(idSoucis));
     }
 }
 
